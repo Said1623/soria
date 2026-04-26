@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { referentielApi, moteurApi } from '../api';
+import { referentielApi, moteurApi, kitsApi } from '../api';
 import type { ReferentielItem, ConsigneResult, GenererDto } from '../types';
 
 export default function Generateur() {
@@ -20,17 +20,20 @@ export default function Generateur() {
   const [c4Selected, setC4Selected] = useState('');
   const [c4Precision, setC4Precision] = useState('');
 
+  const [kit, setKit] = useState<any>(null);
   const [result, setResult] = useState<ConsigneResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!kitCode) return;
     Promise.all([
+      kitsApi.getByCode(kitCode),
       referentielApi.getCategorie(kitCode, 'C1'),
       referentielApi.getCategorie(kitCode, 'C2'),
       referentielApi.getCategorie(kitCode, 'C3'),
       referentielApi.getCategorie(kitCode, 'C4'),
-    ]).then(([c1, c2, c3, c4]) => {
+    ]).then(([kitData, c1, c2, c3, c4]) => {
+      setKit(kitData);
       setC1Items(c1);
       setC2Items(c2);
       setC3Items(c3);
@@ -75,11 +78,20 @@ export default function Generateur() {
 
         {/* HEADER */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-indigo-600">Clarifie</h1>
-          <p className="text-gray-500">Générateur de consigne claire — Méthode 4C</p>
+          <h1 className="text-3xl font-bold text-indigo-600">{kit?.nom || kitCode}</h1>
+          <p className="text-gray-500">{kit?.sous_titre || 'Kit en cours de développement'}</p>
         </div>
 
         <div className="space-y-6">
+
+          {c1Items.length === 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+              <p className="text-amber-700 font-medium">🚧 Kit en cours de développement</p>
+              <p className="text-amber-500 text-sm mt-1">
+                Le contenu de ce kit sera disponible prochainement.
+              </p>
+            </div>
+          )}
 
           {/* C1 — COMMANDE */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">

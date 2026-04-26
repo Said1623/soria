@@ -18,3 +18,7 @@ export const domainesApi = {
   getAll: () => api.get('/domaines').then(r => r.data),
   getKits: (code: string) => api.get(`/kits/domaine/${code}`).then(r => r.data),
 };
+
+export const kitsApi = {
+  getByCode: (code: string) => api.get(`/kits/${code}`).then(r => r.data),
+};

@@ -2,6 +2,36 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { kitsApi } from '../api';
 
+const MODULES = [
+  {
+    code: 'diagnostic',
+    titre: 'Diagnostic',
+    icon: '🔍',
+    sous_titre: 'Tester la clarté de mes consignes',
+    description: 'En moins d\'1 minute, identifiez si vos consignes posent problème.',
+    accent: '#7c3aed',
+    bg: 'hover:border-violet-200',
+  },
+  {
+    code: 'analyseur',
+    titre: 'Analyseur',
+    icon: '🔬',
+    sous_titre: 'Analyser une consigne existante',
+    description: 'Évaluez votre consigne selon les 4 critères C1/C2/C3/C4.',
+    accent: '#2563eb',
+    bg: 'hover:border-blue-200',
+  },
+  {
+    code: 'generateur',
+    titre: 'Générateur',
+    icon: '✨',
+    sous_titre: 'Créer une consigne claire',
+    description: 'Construisez une consigne structurée en 4 étapes guidées.',
+    accent: '#4f46e5',
+    bg: 'hover:border-indigo-200',
+  },
+];
+
 export default function KitHome() {
   const { kitCode } = useParams<{ kitCode: string }>();
   const navigate = useNavigate();
@@ -12,86 +42,75 @@ export default function KitHome() {
     kitsApi.getByCode(kitCode).then(setKit);
   }, [kitCode]);
 
-  const modules = [
-    {
-      code: 'diagnostic',
-      titre: '🔍 Diagnostic',
-      sous_titre: 'Tester la clarté de mes consignes',
-      description: 'En moins d\'1 minute, identifiez si vos consignes posent problème.',
-      couleur: 'bg-violet-50 border-violet-200 hover:border-violet-400',
-      bouton: 'bg-violet-600 hover:bg-violet-700',
-      disponible: true,
-    },
-    {
-      code: 'analyseur',
-      titre: '🔬 Analyseur',
-      sous_titre: 'Analyser une consigne existante',
-      description: 'Évaluez votre consigne selon les 4 critères C1/C2/C3/C4.',
-      couleur: 'bg-blue-50 border-blue-200 hover:border-blue-400',
-      bouton: 'bg-blue-600 hover:bg-blue-700',
-      disponible: true,
-    },
-    {
-      code: 'generateur',
-      titre: '✨ Générateur',
-      sous_titre: 'Créer une consigne claire',
-      description: 'Construisez une consigne structurée en 4 étapes guidées.',
-      couleur: 'bg-indigo-50 border-indigo-200 hover:border-indigo-400',
-      bouton: 'bg-indigo-600 hover:bg-indigo-700',
-      disponible: true,
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="max-w-4xl mx-auto px-8 py-10">
 
-      {/* HEADER */}
-      <div className="bg-white border-b border-gray-100 px-8 py-6">
-        <div className="max-w-4xl mx-auto">
+      {/* Kit title */}
+      <div className="mb-10">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-medium text-indigo-400 uppercase tracking-widest">
+            Kit
+          </span>
+        </div>
+        <h1 className="text-2xl font-semibold text-gray-800">
+          {kit?.nom || kitCode}
+        </h1>
+        {kit?.sous_titre && (
+          <p className="text-sm text-gray-400 mt-1">{kit.sous_titre}</p>
+        )}
+      </div>
+
+      {/* Séparateur */}
+      <div className="flex items-center gap-3 mb-8">
+        <span className="text-xs text-gray-400">Choisissez un module</span>
+        <div className="flex-1 h-px bg-gray-100" />
+      </div>
+
+      {/* Modules */}
+      <div className="grid grid-cols-3 gap-4">
+        {MODULES.map(mod => (
           <button
-            onClick={() => navigate('/')}
-            className="text-sm text-gray-400 hover:text-gray-600 mb-3 flex items-center gap-1"
+            key={mod.code}
+            onClick={() => navigate(`/kit/${kitCode}/${mod.code}`)}
+            className={`group text-left bg-white rounded-xl p-6 border border-gray-100
+                        transition-all duration-150 hover:shadow-sm ${mod.bg}`}
           >
-            ← Retour
-          </button>
-          <h1 className="text-2xl font-bold text-indigo-600">
-            {kit?.nom || kitCode}
-          </h1>
-          <p className="text-gray-500 mt-1">{kit?.sous_titre}</p>
-        </div>
-      </div>
-
-      {/* MODULES */}
-      <div className="max-w-4xl mx-auto px-8 py-8">
-        <p className="text-gray-500 mb-6">
-          Choisissez un module selon votre besoin :
-        </p>
-
-        <div className="grid grid-cols-3 gap-6">
-          {modules.map(mod => (
-            <div
-              key={mod.code}
-              className={`rounded-xl p-6 border-2 transition-all cursor-pointer ${mod.couleur}`}
-              onClick={() => navigate(`/kit/${kitCode}/${mod.code}`)}
-            >
-              <h3 className="text-lg font-bold text-gray-800 mb-1">
-                {mod.titre}
-              </h3>
-              <p className="text-sm font-medium text-gray-600 mb-3">
-                {mod.sous_titre}
-              </p>
-              <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-                {mod.description}
-              </p>
-              <button
-                className={`w-full text-white text-sm font-medium py-2 rounded-lg transition-all ${mod.bouton}`}
+            {/* Icône + titre */}
+            <div className="flex items-start gap-3 mb-4">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-base flex-shrink-0"
+                style={{ backgroundColor: `${mod.accent}15` }}
               >
-                Accéder →
-              </button>
+                <span style={{ fontSize: '16px' }}>{mod.icon}</span>
+              </div>
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: mod.accent }}
+                >
+                  {mod.titre}
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5">{mod.sous_titre}</p>
+              </div>
             </div>
-          ))}
-        </div>
+
+            {/* Description */}
+            <p className="text-xs text-gray-400 leading-relaxed mb-5">
+              {mod.description}
+            </p>
+
+            {/* CTA */}
+            <div
+              className="text-xs font-medium flex items-center gap-1 group-hover:gap-2 transition-all"
+              style={{ color: mod.accent }}
+            >
+              Accéder
+              <span>→</span>
+            </div>
+          </button>
+        ))}
       </div>
+
     </div>
   );
 }

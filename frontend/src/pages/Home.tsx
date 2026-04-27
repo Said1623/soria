@@ -1,111 +1,129 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { domainesApi } from '../api';
+  import { useEffect, useState } from 'react';
+  import { useNavigate } from 'react-router-dom';
+  import { domainesApi } from '../api';
 
-interface Kit {
-  code: string;
-  nom: string;
-  sous_titre: string;
-}
-
-interface Domaine {
-  id: number;
-  code: string;
-  nom: string;
-  icone: string;
-  couleur: string;
-  kits?: Kit[];
-}
-
-export default function Home() {
-  const [domaines, setDomaines] = useState<Domaine[]>([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadAll = async () => {
-      const allDomaines = await domainesApi.getAll();
-      const withKits = await Promise.all(
-        allDomaines.map(async (d: Domaine) => {
-          const kits = await domainesApi.getKits(d.code);
-          return { ...d, kits };
-        })
-      );
-      setDomaines(withKits);
-      setLoading(false);
-    };
-    loadAll();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-400">Chargement...</p>
-      </div>
-    );
+  interface Kit {
+    code: string;
+    nom: string;
+    sous_titre: string;
+    actif: boolean;
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+  interface Domaine {
+    id: number;
+    code: string;
+    nom: string;
+    icone: string;
+    couleur: string;
+    kits?: Kit[];
+  }
 
-      {/* HEADER */}
-      <div className="bg-white border-b border-gray-100 px-8 py-6">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-indigo-600">SORIA</h1>
-          <p className="text-gray-500 mt-1">Système d'action guidée pour la classe</p>
+  export default function Home() {
+    const [domaines, setDomaines] = useState<Domaine[]>([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const loadAll = async () => {
+        const allDomaines = await domainesApi.getAll();
+        const withKits = await Promise.all(
+          allDomaines.map(async (d: Domaine) => {
+            const kits = await domainesApi.getKits(d.code);
+            const result = { ...d, kits };
+            console.log('result kits for', d.code, ':', result.kits.length);
+            return result;
+          })
+        );
+        console.log('withKits CONSIGNES kits:', withKits.find(d => d.code === 'CONSIGNES')?.kits.length);
+        setDomaines(withKits);
+        setLoading(false);
+      };
+      loadAll();
+    }, []);
+
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-[calc(100vh-56px)]">
+          <div className="flex items-center gap-3">
+            <div className="w-4 h-4 rounded-full bg-indigo-200 animate-pulse" />
+            <span className="text-sm text-gray-400">Chargement...</span>
+          </div>
         </div>
-      </div>
+      );
+    }
 
-      {/* CONTENU */}
-      <div className="max-w-6xl mx-auto px-8 py-8">
+    console.log('kits CONSIGNES:', domaines.find(d => d.code === 'CONSIGNES')?.kits);
 
-        <p className="text-gray-500 mb-8">
-          Choisissez un domaine et sélectionnez le kit correspondant à votre situation.
-        </p>
+    return (
+      <div className="max-w-6xl mx-auto px-8 py-6">
 
-        <div className="space-y-8">
+        {/* Intro */}
+        <div className="mb-6">
+          <p className="text-sm text-gray-400">
+            Choisissez un domaine et sélectionnez le kit correspondant à votre situation.
+          </p>
+        </div>
+
+        {/* Domaines */}
+        <div className="space-y-10">
           {domaines.map(domaine => (
-            <div key={domaine.code}>
+            <section key={domaine.code}>
 
-              {/* TITRE DOMAINE */}
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">{domaine.icone}</span>
+              {/* En-tête domaine */}
+              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
+                <span className="text-base">{domaine.icone}</span>
                 <h2
-                  className="text-xl font-bold"
+                  className="text-sm font-semibold tracking-wide uppercase"
                   style={{ color: domaine.couleur }}
                 >
                   {domaine.nom}
                 </h2>
+                <span className="ml-auto text-xs text-gray-300">
+                  {domaine.kits?.filter(k => k.actif).length}/{domaine.kits?.length} kits
+                </span>
               </div>
 
-              {/* KITS */}
-              <div className="grid grid-cols-4 gap-4">
+              {/* Grille kits */}
+              <div className="grid grid-cols-4 gap-3">
                 {domaine.kits?.map(kit => (
-                  <div
+                  <button
                     key={kit.code}
-                    onClick={() => navigate(`/kit/${kit.code}`)}
-                    className="bg-white rounded-xl p-5 shadow-sm border border-gray-100
-                               cursor-pointer hover:shadow-md transition-all group"
-                    style={{ borderLeft: `4px solid ${domaine.couleur}` }}
+                    onClick={() => kit.actif ? navigate(`/kit/${kit.code}`) : null}
+                    disabled={!kit.actif}
+                    className={`group text-left rounded-lg p-4 border transition-all duration-150
+                      ${kit.actif
+                        ? 'bg-white border-gray-100 hover:border-indigo-200 hover:shadow-sm cursor-pointer'
+                        : 'bg-gray-50 border-gray-100 cursor-not-allowed opacity-50'
+                      }`}
                   >
-                    <h3
-                      className="text-base font-bold group-hover:opacity-80 transition-opacity"
-                      style={{ color: domaine.couleur }}
-                    >
-                      {kit.nom}
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                    <div
+                      className="w-1 h-8 rounded-full mb-3"
+                      style={{ backgroundColor: kit.actif ? domaine.couleur : '#d1d5db' }}
+                    />
+
+                    <div className="flex items-start justify-between gap-2">
+                      <p
+                        className="text-sm font-semibold mb-1"
+                        style={{ color: kit.actif ? domaine.couleur : '#9ca3af' }}
+                      >
+                        {kit.nom}
+                      </p>
+                      {!kit.actif && (
+                        <span className="text-gray-300 text-xs flex-shrink-0 mt-0.5">🔒</span>
+                      )}
+                    </div>
+
+                    <p className="text-xs text-gray-400 leading-relaxed">
                       {kit.sous_titre}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </div>
 
-            </div>
+            </section>
           ))}
         </div>
 
       </div>
-    </div>
-  );
-}
+    );
+  }

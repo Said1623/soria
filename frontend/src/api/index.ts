@@ -16,7 +16,8 @@ export const moteurApi = {
 
 export const domainesApi = {
   getAll: () => api.get('/domaines').then(r => r.data),
-  getKits: (code: string) => api.get(`/kits/domaine/${code}`).then(r => r.data),
+  getKits: (code: string) => api.get(`/kits/domaine/${code}`)
+    .then(r => { console.log('API kits response:', r.data); return r.data; }),
 };
 
 export const kitsApi = {

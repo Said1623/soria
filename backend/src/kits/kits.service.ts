@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
 import { Kit } from './entities/kit.entity';
+import { KitDto } from './dto/kit.dto';
 
 @Injectable()
 export class KitsService {
@@ -10,19 +12,23 @@ export class KitsService {
     private kitRepo: Repository<Kit>,
   ) {}
 
-  findAll() {
-    return this.kitRepo.find({ where: { actif: true }, relations: ['domaine'], order: { ordre: 'ASC' } });
+  async findAll() {
+    const kits = await this.kitRepo.find({ where: { actif: true }, relations: ['domaine'], order: { ordre: 'ASC' } });
+    return plainToInstance(KitDto, kits, { excludeExtraneousValues: true });
   }
 
-  findByDomaine(domaineCode: string) {
-    return this.kitRepo.find({
-      where: { domaine: { code: domaineCode }, actif: true },
+  async findByDomaine(domaineCode: string) {
+    const kits = await this.kitRepo.find({
+      where: { domaine: { code: domaineCode } },
       relations: ['domaine'],
       order: { ordre: 'ASC' },
     });
+    console.log('findByDomaine', domaineCode, kits.length, kits.map(k => k.code + ':' + k.actif));
+    return plainToInstance(KitDto, kits, { excludeExtraneousValues: true });
   }
 
-  findByCode(code: string) {
-    return this.kitRepo.findOne({ where: { code }, relations: ['domaine'] });
+  async findByCode(code: string) {
+    const kit = await this.kitRepo.findOne({ where: { code }, relations: ['domaine'] });
+    return plainToInstance(KitDto, kit, { excludeExtraneousValues: true });
   }
 }

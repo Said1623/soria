@@ -48,6 +48,13 @@ export default function KitHome() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
 
+      <button
+        onClick={() => navigate(-1)}
+        className="text-sm text-stone-400 hover:text-stone-600 transition-colors flex items-center gap-1 mb-8"
+      >
+        ← Retour
+      </button>
+
       <div className="mb-10">
         <span className="text-xs font-semibold text-violet-400 uppercase tracking-widest block mb-2">Kit</span>
         <h1 className="text-2xl font-semibold text-stone-800">

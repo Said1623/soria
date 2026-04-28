@@ -14,7 +14,13 @@ export default function Login() {
   const store = (token: string, user: object) => {
     localStorage.setItem('soria_token', token);
     localStorage.setItem('soria_user', JSON.stringify(user));
-    navigate('/');
+    const redirect = localStorage.getItem('soria_redirect');
+    if (redirect) {
+      localStorage.removeItem('soria_redirect');
+      navigate(redirect);
+    } else {
+      navigate('/');
+    }
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {

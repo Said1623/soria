@@ -1,15 +1,20 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import KitHome from './pages/KitHome';
 import Diagnostic from './pages/Diagnostic';
 import Analyseur from './pages/Analyseur';
 import Generateur from './pages/Generateur';
+import Login from './pages/Login';
+import Inscription from './pages/Inscription';
+import { useAuth } from './hooks/useAuth';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
   const isHome = location.pathname === '/';
+  const isPublic = ['/login', '/inscription'].some(p => location.pathname.startsWith(p));
 
   return (
     <header
@@ -23,20 +28,41 @@ function Header() {
         >
           SORIA
         </button>
-        <span className="text-xs text-gray-400 hidden sm:block">
+        <span className="text-sm text-gray-600 hidden sm:block">
           Système d'action guidée pour la classe
         </span>
-        {!isHome && (
-          <button
-            onClick={() => navigate(-1)}
-            className="text-sm text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
-          >
-            ← Retour
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          {!isHome && !isPublic && (
+            <button
+              onClick={() => navigate(-1)}
+              className="text-sm text-gray-600 hover:text-gray-800 transition-colors flex items-center gap-1"
+            >
+              ← Retour
+            </button>
+          )}
+          {isAuthenticated && (
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-700 font-medium">
+                {user?.prenom || user?.firstName || user?.email}
+              </span>
+              <button
+                onClick={logout}
+                className="text-sm text-gray-500 hover:text-red-600 transition-colors"
+              >
+                Déconnexion
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
+}
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
 }
 
 function App() {
@@ -45,11 +71,13 @@ function App() {
       <Header />
       <main className="pt-14 min-h-screen bg-slate-50">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/kit/:kitCode" element={<KitHome />} />
-          <Route path="/kit/:kitCode/diagnostic" element={<Diagnostic />} />
-          <Route path="/kit/:kitCode/analyseur" element={<Analyseur />} />
-          <Route path="/kit/:kitCode/generateur" element={<Generateur />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/inscription" element={<Inscription />} />
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/kit/:kitCode" element={<ProtectedRoute><KitHome /></ProtectedRoute>} />
+          <Route path="/kit/:kitCode/diagnostic" element={<ProtectedRoute><Diagnostic /></ProtectedRoute>} />
+          <Route path="/kit/:kitCode/analyseur" element={<ProtectedRoute><Analyseur /></ProtectedRoute>} />
+          <Route path="/kit/:kitCode/generateur" element={<ProtectedRoute><Generateur /></ProtectedRoute>} />
         </Routes>
       </main>
     </BrowserRouter>

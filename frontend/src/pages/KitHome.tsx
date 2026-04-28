@@ -52,17 +52,17 @@ export default function KitHome() {
             Kit
           </span>
         </div>
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <h1 className="text-2xl font-semibold text-gray-900">
           {kit?.nom || kitCode}
         </h1>
         {kit?.sous_titre && (
-          <p className="text-sm text-gray-400 mt-1">{kit.sous_titre}</p>
+          <p className="text-sm text-gray-600 mt-1">{kit.sous_titre}</p>
         )}
       </div>
 
       {/* Séparateur */}
       <div className="flex items-center gap-3 mb-8">
-        <span className="text-xs text-gray-400">Choisissez un module</span>
+        <span className="text-xs text-gray-500">Choisissez un module</span>
         <div className="flex-1 h-px bg-gray-100" />
       </div>
 
@@ -90,12 +90,12 @@ export default function KitHome() {
                 >
                   {mod.titre}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{mod.sous_titre}</p>
+                <p className="text-sm text-gray-600 mt-0.5">{mod.sous_titre}</p>
               </div>
             </div>
 
             {/* Description */}
-            <p className="text-xs text-gray-400 leading-relaxed mb-5">
+            <p className="text-sm text-gray-600 leading-relaxed mb-5">
               {mod.description}
             </p>
 

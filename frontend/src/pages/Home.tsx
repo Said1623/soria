@@ -46,7 +46,7 @@
         <div className="flex items-center justify-center h-[calc(100vh-56px)]">
           <div className="flex items-center gap-3">
             <div className="w-4 h-4 rounded-full bg-indigo-200 animate-pulse" />
-            <span className="text-sm text-gray-400">Chargement...</span>
+            <span className="text-sm text-gray-600">Chargement...</span>
           </div>
         </div>
       );
@@ -59,7 +59,7 @@
 
         {/* Intro */}
         <div className="mb-6">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-600">
             Choisissez un domaine et sélectionnez le kit correspondant à votre situation.
           </p>
         </div>
@@ -73,12 +73,12 @@
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
                 <span className="text-base">{domaine.icone}</span>
                 <h2
-                  className="text-sm font-semibold tracking-wide uppercase"
+                  className="text-sm font-bold tracking-wide uppercase"
                   style={{ color: domaine.couleur }}
                 >
                   {domaine.nom}
                 </h2>
-                <span className="ml-auto text-xs text-gray-300">
+                <span className="ml-auto text-xs text-gray-400">
                   {domaine.kits?.filter(k => k.actif).length}/{domaine.kits?.length} kits
                 </span>
               </div>
@@ -93,7 +93,7 @@
                     className={`group text-left rounded-lg p-4 border transition-all duration-150
                       ${kit.actif
                         ? 'bg-white border-gray-100 hover:border-indigo-200 hover:shadow-sm cursor-pointer'
-                        : 'bg-gray-50 border-gray-100 cursor-not-allowed opacity-50'
+                        : 'bg-gray-50 border-gray-100 cursor-not-allowed opacity-60'
                       }`}
                   >
                     <div
@@ -103,17 +103,17 @@
 
                     <div className="flex items-start justify-between gap-2">
                       <p
-                        className="text-sm font-semibold mb-1"
-                        style={{ color: kit.actif ? domaine.couleur : '#9ca3af' }}
+                        className="text-sm font-bold mb-1"
+                        style={{ color: kit.actif ? domaine.couleur : '#6b7280', fontWeight: kit.actif ? 600 : undefined }}
                       >
                         {kit.nom}
                       </p>
                       {!kit.actif && (
-                        <span className="text-gray-300 text-xs flex-shrink-0 mt-0.5">🔒</span>
+                        <span className="text-gray-500 text-sm flex-shrink-0 mt-0.5">🔒</span>
                       )}
                     </div>
 
-                    <p className="text-xs text-gray-400 leading-relaxed">
+                    <p className="text-sm text-gray-600 leading-relaxed">
                       {kit.sous_titre}
                     </p>
                   </button>

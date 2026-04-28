@@ -57,10 +57,10 @@ export default function Inscription() {
 
   if (loadingVerif) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="flex items-center gap-3">
-          <div className="w-4 h-4 rounded-full bg-indigo-200 animate-pulse" />
-          <span className="text-sm text-gray-600">Vérification du lien...</span>
+          <div className="w-4 h-4 rounded-full bg-violet-200 animate-pulse" />
+          <span className="text-sm text-stone-500">Vérification du lien...</span>
         </div>
       </div>
     );
@@ -68,13 +68,15 @@ export default function Inscription() {
 
   if (!verification?.valid) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <h1 className="text-2xl font-bold text-indigo-600 mb-2">SORIA</h1>
-          <div className="bg-white rounded-xl border border-red-100 shadow-sm p-8 mt-6">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-violet-700 mb-4">
+            <span className="text-white font-bold text-xl">S</span>
+          </div>
+          <div className="bg-white rounded-2xl border border-red-100 shadow-sm p-8 mt-2">
             <div className="text-4xl mb-4">🔗</div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">Lien invalide</h2>
-            <p className="text-sm text-gray-600">{verification?.reason || 'Ce lien d\'invitation n\'est pas valide.'}</p>
+            <h2 className="text-base font-semibold text-stone-800 mb-2">Lien invalide</h2>
+            <p className="text-sm text-stone-500">{verification?.reason || 'Ce lien d\'invitation n\'est pas valide.'}</p>
           </div>
         </div>
       </div>
@@ -82,26 +84,29 @@ export default function Inscription() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-indigo-600 mb-1">SORIA</h1>
-          <p className="text-sm text-gray-500">Créer votre compte</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-violet-700 mb-4">
+            <span className="text-white font-bold text-xl">S</span>
+          </div>
+          <h1 className="text-2xl font-bold text-stone-800 mb-1">SORIA</h1>
+          <p className="text-sm text-stone-500">Créer votre compte</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
+        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-8">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Inscription</h2>
-            <p className="text-sm text-gray-500">
-              Compte pour <span className="font-medium text-gray-700">{verification.email}</span>
+            <h2 className="text-base font-semibold text-stone-800 mb-1">Inscription</h2>
+            <p className="text-sm text-stone-500">
+              Compte pour <span className="font-medium text-stone-700">{verification.email}</span>
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5">Prénom</label>
                 <input
                   type="text"
                   value={prenom}
@@ -109,52 +114,56 @@ export default function Inscription() {
                   required
                   autoFocus
                   placeholder="Marie"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                             focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                  className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm
+                             focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                             bg-stone-50 placeholder:text-stone-400"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5">Nom</label>
                 <input
                   type="text"
                   value={nom}
                   onChange={e => setNom(e.target.value)}
                   required
                   placeholder="Dupont"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
-                             focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                  className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm
+                             focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                             bg-stone-50 placeholder:text-stone-400"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1.5">Mot de passe</label>
               <input
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
                 placeholder="8 caractères minimum"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm
-                           focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm
+                           focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                           bg-stone-50 placeholder:text-stone-400"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1.5">Confirmer le mot de passe</label>
               <input
                 type="password"
                 value={confirm}
                 onChange={e => setConfirm(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm
-                           focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm
+                           focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                           bg-stone-50 placeholder:text-stone-400"
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-2.5">
+              <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
                 {error}
               </p>
             )}
@@ -162,8 +171,8 @@ export default function Inscription() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg
-                         hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-violet-700 text-white font-semibold py-2.5 rounded-xl
+                         hover:bg-violet-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? 'Création...' : 'Créer mon compte'}
             </button>

@@ -23,7 +23,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Étape 1 — Pédagogsphère
+      // Étape 1 — Pédagosphère
       const res1 = await fetch(PEDAGOSPHERE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,7 +36,6 @@ export default function Login() {
           store(data.access_token, data.enseignant);
           return;
         }
-        // Connecté sur Pédagogsphère mais rôle non autorisé
         setError('Accès réservé aux enseignants');
         return;
       }
@@ -63,20 +62,23 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-indigo-600 mb-1">SORIA</h1>
-          <p className="text-sm text-gray-500">Système d'action guidée pour la classe</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-violet-700 mb-4">
+            <span className="text-white font-bold text-xl">S</span>
+          </div>
+          <h1 className="text-2xl font-bold text-stone-800 mb-1">SORIA</h1>
+          <p className="text-sm text-stone-500">Système d'action guidée pour la classe</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Connexion</h2>
+        <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-8">
+          <h2 className="text-base font-semibold text-stone-800 mb-6">Connexion</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1.5">Email</label>
               <input
                 type="email"
                 value={email}
@@ -84,26 +86,28 @@ export default function Login() {
                 required
                 autoFocus
                 placeholder="votre@email.fr"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm
-                           focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm
+                           focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                           bg-stone-50 placeholder:text-stone-400"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1.5">Mot de passe</label>
               <input
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm
-                           focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm
+                           focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                           bg-stone-50 placeholder:text-stone-400"
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-2.5">
+              <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
                 {error}
               </p>
             )}
@@ -111,8 +115,8 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg
-                         hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-violet-700 text-white font-semibold py-2.5 rounded-xl
+                         hover:bg-violet-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Connexion...' : 'Se connecter'}
             </button>

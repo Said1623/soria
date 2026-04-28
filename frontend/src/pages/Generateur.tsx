@@ -73,19 +73,18 @@ export default function Generateur() {
   const c1Info = c1Items.find(i => i.code === c1Selected);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-stone-50 p-6">
       <div className="max-w-3xl mx-auto">
 
-        {/* HEADER */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-indigo-600">{kit?.nom || kitCode}</h1>
-          <p className="text-gray-500">{kit?.sous_titre || 'Kit en cours de développement'}</p>
+          <h1 className="text-2xl font-bold text-violet-700">{kit?.nom || kitCode}</h1>
+          <p className="text-stone-500 text-sm mt-1">{kit?.sous_titre || 'Kit en cours de développement'}</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-5">
 
           {c1Items.length === 0 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
               <p className="text-amber-700 font-medium">🚧 Kit en cours de développement</p>
               <p className="text-amber-500 text-sm mt-1">
                 Le contenu de ce kit sera disponible prochainement.
@@ -94,25 +93,25 @@ export default function Generateur() {
           )}
 
           {/* C1 — COMMANDE */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h2 className="font-bold text-gray-800 mb-1">
-              C1 — Commande <span className="text-red-500">*</span>
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
+            <h2 className="font-bold text-stone-800 mb-1">
+              C1 — Commande <span className="text-red-400">*</span>
             </h2>
-            <p className="text-sm text-gray-400 mb-4">Que doivent faire les élèves ?</p>
+            <p className="text-sm text-stone-400 mb-4">Que doivent faire les élèves ?</p>
 
             <div className="grid grid-cols-3 gap-2 mb-4">
               {c1Items.map(item => (
                 <button
                   key={item.code}
                   onClick={() => setC1Selected(item.code)}
-                  className={`p-3 rounded-lg text-sm font-medium border transition-all text-left
+                  className={`p-3 rounded-xl text-sm font-medium border transition-all text-left
                     ${c1Selected === item.code
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-indigo-300'
+                      ? 'bg-violet-700 text-white border-violet-700'
+                      : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-violet-300'
                     }`}
                 >
                   <div>{item.label}</div>
-                  <div className="text-xs opacity-70 mt-0.5">{item.famille}</div>
+                  <div className="text-xs opacity-60 mt-0.5">{item.famille}</div>
                 </button>
               ))}
             </div>
@@ -120,10 +119,10 @@ export default function Generateur() {
             {c1Selected && (
               <>
                 {c1Info && (
-                  <div className="bg-indigo-50 rounded-lg p-3 mb-3 text-sm">
-                    <p className="text-indigo-700">💡 {c1Info.definition}</p>
+                  <div className="bg-violet-50 rounded-xl p-3 mb-3 text-sm">
+                    <p className="text-violet-700">💡 {c1Info.definition}</p>
                     {c1Info.conseil && (
-                      <p className="text-indigo-500 mt-1">👉 {c1Info.conseil}</p>
+                      <p className="text-violet-500 mt-1">👉 {c1Info.conseil}</p>
                     )}
                   </div>
                 )}
@@ -132,29 +131,29 @@ export default function Generateur() {
                   placeholder="Précision (ex: les deux personnages)"
                   value={c1Precision}
                   onChange={e => setC1Precision(e.target.value)}
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm
-                             focus:outline-none focus:border-indigo-400"
+                  className="w-full border border-stone-200 rounded-xl px-4 py-2 text-sm bg-stone-50
+                             focus:outline-none focus:border-violet-400"
                 />
               </>
             )}
           </div>
 
           {/* C2 — CIBLE */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h2 className="font-bold text-gray-800 mb-1">
-              C2 — Cible <span className="text-red-500">*</span>
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
+            <h2 className="font-bold text-stone-800 mb-1">
+              C2 — Cible <span className="text-red-400">*</span>
             </h2>
-            <p className="text-sm text-gray-400 mb-4">Sur quoi travaillent les élèves ?</p>
+            <p className="text-sm text-stone-400 mb-4">Sur quoi travaillent les élèves ?</p>
 
             <div className="grid grid-cols-3 gap-2 mb-4">
               {c2Items.map(item => (
                 <button
                   key={item.code}
                   onClick={() => setC2Selected(item.code)}
-                  className={`p-3 rounded-lg text-sm font-medium border transition-all
+                  className={`p-3 rounded-xl text-sm font-medium border transition-all
                     ${c2Selected === item.code
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-indigo-300'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-blue-300'
                     }`}
                 >
                   {item.label}
@@ -168,16 +167,16 @@ export default function Generateur() {
                 placeholder="Précision (ex: page 12, ci-dessous…)"
                 value={c2Precision}
                 onChange={e => setC2Precision(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm
-                           focus:outline-none focus:border-indigo-400"
+                className="w-full border border-stone-200 rounded-xl px-4 py-2 text-sm bg-stone-50
+                           focus:outline-none focus:border-blue-400"
               />
             )}
           </div>
 
           {/* C3 — CHEMIN */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h2 className="font-bold text-gray-800 mb-1">C3 — Chemin</h2>
-            <p className="text-sm text-gray-400 mb-4">
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
+            <h2 className="font-bold text-stone-800 mb-1">C3 — Chemin</h2>
+            <p className="text-sm text-stone-400 mb-4">
               Comment s'y prennent-ils ? (max 4 étapes)
             </p>
 
@@ -187,14 +186,14 @@ export default function Generateur() {
                   key={item.code}
                   onClick={() => toggleC3(item.code)}
                   disabled={!c3Selected.includes(item.code) && c3Selected.length >= 4}
-                  className={`p-3 rounded-lg text-sm font-medium border transition-all text-left
+                  className={`p-3 rounded-xl text-sm font-medium border transition-all text-left
                     ${c3Selected.includes(item.code)
                       ? 'bg-emerald-600 text-white border-emerald-600'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-emerald-300'
+                      : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-emerald-300'
                     } disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
                   <div>{item.label}</div>
-                  <div className="text-xs opacity-70 mt-0.5">{item.famille}</div>
+                  <div className="text-xs opacity-60 mt-0.5">{item.famille}</div>
                 </button>
               ))}
             </div>
@@ -204,7 +203,7 @@ export default function Generateur() {
               if (!item) return null;
               return (
                 <div key={code} className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-medium text-emerald-700 w-24">
+                  <span className="text-sm font-medium text-emerald-700 w-28 flex-shrink-0">
                     {item.label}
                   </span>
                   <input
@@ -214,7 +213,7 @@ export default function Generateur() {
                     onChange={e =>
                       setC3Precisions(prev => ({ ...prev, [code]: e.target.value }))
                     }
-                    className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm
+                    className="flex-1 border border-stone-200 rounded-xl px-3 py-1.5 text-sm bg-stone-50
                                focus:outline-none focus:border-emerald-400"
                   />
                 </div>
@@ -223,25 +222,25 @@ export default function Generateur() {
           </div>
 
           {/* C4 — CONSTRUCTION */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h2 className="font-bold text-gray-800 mb-1">
-              C4 — Construction <span className="text-red-500">*</span>
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
+            <h2 className="font-bold text-stone-800 mb-1">
+              C4 — Construction <span className="text-red-400">*</span>
             </h2>
-            <p className="text-sm text-gray-400 mb-4">Que doivent-ils produire ?</p>
+            <p className="text-sm text-stone-400 mb-4">Que doivent-ils produire ?</p>
 
             <div className="grid grid-cols-3 gap-2 mb-4">
               {c4Items.map(item => (
                 <button
                   key={item.code}
                   onClick={() => setC4Selected(item.code)}
-                  className={`p-3 rounded-lg text-sm font-medium border transition-all text-left
+                  className={`p-3 rounded-xl text-sm font-medium border transition-all text-left
                     ${c4Selected === item.code
                       ? 'bg-amber-500 text-white border-amber-500'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:border-amber-300'
+                      : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-amber-300'
                     }`}
                 >
                   <div>{item.label}</div>
-                  <div className="text-xs opacity-70 mt-0.5">{item.famille}</div>
+                  <div className="text-xs opacity-60 mt-0.5">{item.famille}</div>
                 </button>
               ))}
             </div>
@@ -252,7 +251,7 @@ export default function Generateur() {
                 placeholder="Nombre (ex: 2, 3…)"
                 value={c4Precision}
                 onChange={e => setC4Precision(e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm
+                className="w-full border border-stone-200 rounded-xl px-4 py-2 text-sm bg-stone-50
                            focus:outline-none focus:border-amber-400"
               />
             )}
@@ -262,34 +261,32 @@ export default function Generateur() {
           <button
             onClick={handleGenerer}
             disabled={!canGenerate || loading}
-            className="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl
-                       hover:bg-indigo-700 transition-all disabled:opacity-40
-                       disabled:cursor-not-allowed text-lg"
+            className="w-full bg-violet-700 text-white font-bold py-4 rounded-2xl
+                       hover:bg-violet-800 transition-all disabled:opacity-40
+                       disabled:cursor-not-allowed text-base"
           >
             {loading ? 'Génération...' : '✨ Générer ma consigne'}
           </button>
 
           {/* RÉSULTAT */}
           {result && (
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-indigo-200">
-              <h2 className="font-bold text-gray-800 mb-4">📋 Consigne générée</h2>
+            <div className="bg-white rounded-2xl p-6 border border-violet-200">
+              <h2 className="font-bold text-stone-800 mb-4">📋 Consigne générée</h2>
 
-              {/* Version élève */}
-              <div className="bg-indigo-50 rounded-lg p-4 mb-4">
-                <p className="text-xs font-semibold text-indigo-400 mb-2 uppercase tracking-wide">
+              <div className="bg-violet-50 rounded-xl p-4 mb-4">
+                <p className="text-xs font-semibold text-violet-400 mb-2 uppercase tracking-wide">
                   Version élève
                 </p>
-                <p className="text-indigo-900 font-medium text-lg leading-relaxed">
+                <p className="text-violet-900 font-medium text-base leading-relaxed">
                   {result.version_eleve}
                 </p>
               </div>
 
-              {/* Version structurée */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide">
+              <div className="bg-stone-50 rounded-xl p-4 mb-4">
+                <p className="text-xs font-semibold text-stone-400 mb-2 uppercase tracking-wide">
                   Version structurée (enseignant)
                 </p>
-                <div className="text-sm text-gray-700 space-y-1">
+                <div className="text-sm text-stone-700 space-y-1">
                   <p><span className="font-medium">Commande :</span> {result.version_structuree.commande}</p>
                   <p><span className="font-medium">Cible :</span> {result.version_structuree.cible}</p>
                   <p><span className="font-medium">Chemin :</span> {result.version_structuree.chemin.join(' → ')}</p>
@@ -297,8 +294,7 @@ export default function Generateur() {
                 </div>
               </div>
 
-              {/* Version simplifiée */}
-              <div className="bg-emerald-50 rounded-lg p-4">
+              <div className="bg-emerald-50 rounded-xl p-4">
                 <p className="text-xs font-semibold text-emerald-400 mb-2 uppercase tracking-wide">
                   Version simplifiée (différenciation)
                 </p>
@@ -307,11 +303,10 @@ export default function Generateur() {
                 </pre>
               </div>
 
-              {/* Copier */}
               <button
                 onClick={() => navigator.clipboard.writeText(result.version_eleve)}
-                className="mt-4 w-full border border-indigo-300 text-indigo-600
-                           font-medium py-2 rounded-lg hover:bg-indigo-50 transition-all text-sm"
+                className="mt-4 w-full border border-violet-200 text-violet-700
+                           font-medium py-2.5 rounded-xl hover:bg-violet-50 transition-all text-sm"
               >
                 📋 Copier la consigne élève
               </button>

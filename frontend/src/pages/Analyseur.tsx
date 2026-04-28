@@ -7,7 +7,7 @@ const CRITERES = [
     label: 'C1 — Commande',
     question: "L'action demandée est-elle claire ?",
     description: 'Le verbe utilisé est-il précis et compris des élèves ?',
-    couleur: 'indigo',
+    couleur: 'violet',
   },
   {
     code: 'C2',
@@ -36,10 +36,10 @@ const REPONSES = ['Oui', 'Partiellement', 'Non'];
 const SCORES: Record<string, number> = { 'Oui': 0, 'Partiellement': 1, 'Non': 2 };
 
 const COULEURS: Record<string, any> = {
-  indigo:  { bg: 'bg-indigo-50',  border: 'border-indigo-200',  label: 'text-indigo-700',  selected: 'bg-indigo-600 text-white border-indigo-600' },
-  blue:    { bg: 'bg-blue-50',    border: 'border-blue-200',    label: 'text-blue-700',    selected: 'bg-blue-600 text-white border-blue-600' },
+  violet:  { bg: 'bg-violet-50',  border: 'border-violet-200',  label: 'text-violet-700',  selected: 'bg-violet-700 text-white border-violet-700' },
+  blue:    { bg: 'bg-blue-50',    border: 'border-blue-200',    label: 'text-blue-600',    selected: 'bg-blue-600 text-white border-blue-600' },
   emerald: { bg: 'bg-emerald-50', border: 'border-emerald-200', label: 'text-emerald-700', selected: 'bg-emerald-600 text-white border-emerald-600' },
-  amber:   { bg: 'bg-amber-50',   border: 'border-amber-200',   label: 'text-amber-700',   selected: 'bg-amber-500 text-white border-amber-500' },
+  amber:   { bg: 'bg-amber-50',   border: 'border-amber-200',   label: 'text-amber-600',   selected: 'bg-amber-500 text-white border-amber-500' },
 };
 
 export default function Analyseur() {
@@ -72,27 +72,25 @@ export default function Analyseur() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-stone-50">
 
-      {/* HEADER */}
-      <div className="bg-white border-b border-gray-100 px-8 py-6">
+      <div className="bg-white border-b border-stone-100 px-6 py-6">
         <div className="max-w-2xl mx-auto">
           <button
             onClick={() => navigate(`/kit/${kitCode}`)}
-            className="text-sm text-gray-400 hover:text-gray-600 mb-3 flex items-center gap-1"
+            className="text-sm text-stone-400 hover:text-stone-600 mb-3 flex items-center gap-1 transition-colors"
           >
             ← Retour
           </button>
           <h1 className="text-2xl font-bold text-blue-600">🔬 Analyseur</h1>
-          <p className="text-gray-500 mt-1">Analyser une consigne selon les 4C</p>
+          <p className="text-stone-500 mt-1 text-sm">Analyser une consigne selon les 4C</p>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-8 py-8">
+      <div className="max-w-2xl mx-auto px-6 py-8">
 
-        {/* CONSIGNE OPTIONNELLE */}
-        <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm mb-6">
-          <label className="text-sm font-medium text-gray-600 block mb-2">
+        <div className="bg-white rounded-2xl p-5 border border-stone-200 mb-6">
+          <label className="text-sm font-medium text-stone-600 block mb-2">
             Votre consigne (facultatif)
           </label>
           <textarea
@@ -100,30 +98,29 @@ export default function Analyseur() {
             onChange={e => setConsigne(e.target.value)}
             placeholder="Collez ou tapez votre consigne ici pour vous aider à répondre aux questions..."
             rows={3}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm
-                       focus:outline-none focus:border-blue-400 resize-none"
+            className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm bg-stone-50
+                       focus:outline-none focus:border-violet-400 resize-none placeholder:text-stone-400"
           />
-          <p className="text-xs text-gray-400 mt-1">Ce texte n'est pas analysé automatiquement — il sert de référence.</p>
+          <p className="text-xs text-stone-400 mt-1">Ce texte n'est pas analysé automatiquement — il sert de référence.</p>
         </div>
 
-        {/* 4 CRITÈRES */}
         <div className="space-y-4 mb-6">
           {CRITERES.map(critere => {
             const c = COULEURS[critere.couleur];
             return (
-              <div key={critere.code} className={`rounded-xl p-5 border-2 ${c.bg} ${c.border}`}>
-                <p className={`font-bold mb-1 ${c.label}`}>{critere.label}</p>
-                <p className="font-medium text-gray-800 mb-1">{critere.question}</p>
-                <p className="text-xs text-gray-500 mb-4">{critere.description}</p>
+              <div key={critere.code} className={`rounded-2xl p-5 border-2 ${c.bg} ${c.border}`}>
+                <p className={`font-bold mb-1 text-sm ${c.label}`}>{critere.label}</p>
+                <p className="font-medium text-stone-800 mb-1 text-sm">{critere.question}</p>
+                <p className="text-xs text-stone-500 mb-4">{critere.description}</p>
                 <div className="flex gap-2">
                   {REPONSES.map(rep => (
                     <button
                       key={rep}
                       onClick={() => setReponses(prev => ({ ...prev, [critere.code]: rep }))}
-                      className={`flex-1 py-2 rounded-lg text-sm font-medium border-2 transition-all
+                      className={`flex-1 py-2 rounded-xl text-sm font-medium border-2 transition-all
                         ${reponses[critere.code] === rep
                           ? c.selected
-                          : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                          : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'
                         }`}
                     >
                       {rep}
@@ -138,35 +135,34 @@ export default function Analyseur() {
         <button
           onClick={analyser}
           disabled={!tousRemplis}
-          className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl
-                     hover:bg-blue-700 transition-all disabled:opacity-40
-                     disabled:cursor-not-allowed text-lg mb-6"
+          className="w-full bg-violet-700 text-white font-bold py-4 rounded-2xl
+                     hover:bg-violet-800 transition-all disabled:opacity-40
+                     disabled:cursor-not-allowed text-base mb-6"
         >
           Analyser ma consigne
         </button>
 
-        {/* RÉSULTAT */}
         {resultat && (
-          <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
             <div className="flex items-center gap-3 mb-4">
               <span className={`px-3 py-1 rounded-full text-sm font-bold
                 ${resultat.niveau === 'Clair' ? 'bg-green-100 text-green-700' :
-                  resultat.niveau === 'À améliorer' ? 'bg-orange-100 text-orange-700' :
+                  resultat.niveau === 'À améliorer' ? 'bg-amber-100 text-amber-700' :
                   'bg-red-100 text-red-700'}`}
               >
                 {resultat.niveau}
               </span>
-              <span className="text-sm text-gray-500">Score : {resultat.score}/8</span>
+              <span className="text-sm text-stone-500">Score : {resultat.score}/8</span>
             </div>
-            <p className="text-gray-700 font-medium mb-4">{resultat.message}</p>
+            <p className="text-stone-700 font-medium mb-4 text-sm">{resultat.message}</p>
 
             {resultat.problemes.length > 0 && (
               <div className="mb-4">
-                <p className="text-sm font-medium text-gray-600 mb-2">Points à améliorer :</p>
+                <p className="text-sm font-medium text-stone-600 mb-2">Points à améliorer :</p>
                 <div className="space-y-2">
                   {resultat.problemes.map((p: any) => (
-                    <div key={p.code} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="text-orange-400">⚠</span>
+                    <div key={p.code} className="flex items-center gap-2 text-sm text-stone-600">
+                      <span className="text-amber-500">⚠</span>
                       {p.label} — {p.question}
                     </div>
                   ))}
@@ -176,8 +172,8 @@ export default function Analyseur() {
 
             <button
               onClick={() => navigate(`/kit/${kitCode}/generateur`)}
-              className="w-full bg-indigo-600 text-white font-medium py-3 rounded-xl
-                         hover:bg-indigo-700 transition-all"
+              className="w-full bg-violet-700 text-white font-medium py-3 rounded-2xl
+                         hover:bg-violet-800 transition-all"
             >
               ✨ Créer une consigne améliorée
             </button>

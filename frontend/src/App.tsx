@@ -83,7 +83,7 @@ function App() {
           <Route path="/inscription" element={<Inscription />} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/domaine/:code" element={<DomaineHome />} />
-          <Route path="/kit/:kitCode" element={<ProtectedRoute><KitHome /></ProtectedRoute>} />
+          <Route path="/kit/:kitCode" element={<KitHome />} />
           <Route path="/kit/:kitCode/diagnostic" element={<ProtectedRoute><Diagnostic /></ProtectedRoute>} />
           <Route path="/kit/:kitCode/analyseur" element={<ProtectedRoute><Analyseur /></ProtectedRoute>} />
           <Route path="/kit/:kitCode/generateur" element={<ProtectedRoute><Generateur /></ProtectedRoute>} />

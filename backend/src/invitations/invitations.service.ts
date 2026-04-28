@@ -18,7 +18,7 @@ export class InvitationsService {
     @InjectRepository(SoriaUser)
     private readonly userRepo: Repository<SoriaUser>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async createInvitation(email: string): Promise<Invitation> {
     const existing = await this.invitationRepo.findOne({
@@ -34,9 +34,9 @@ export class InvitationsService {
 
     const invitation = this.invitationRepo.create({ email, token, status: 'pending', expires_at });
     await this.invitationRepo.save(invitation);
-console.log('RESEND KEY:', process.env.RESEND_API_KEY ? 'OK' : 'MANQUANTE');
+
     await this.resend.emails.send({
-      from: 'SORIA <noreply@TONDOMAINE_VERIFIE>',
+      from: 'SORIA <noreply@soria.app>',
       to: email,
       subject: 'Invitation à rejoindre SORIA',
       html: `
@@ -59,71 +59,76 @@ console.log('RESEND KEY:', process.env.RESEND_API_KEY ? 'OK' : 'MANQUANTE');
       `,
     });
 
-    return invitation;
+    console.log('RESEND RESULT:', JSON.stringify(result));
+  } catch(err) {
+    console.error('RESEND ERROR:', err);
   }
 
-  async verifyToken(token: string): Promise<{ valid: boolean; email?: string; reason?: string }> {
-    const invitation = await this.invitationRepo.findOne({ where: { token } });
+ //   return invitation;
+ //  }
 
-    if (!invitation) {
-      return { valid: false, reason: 'Token invalide' };
-    }
-    if (invitation.status === 'accepted') {
-      return { valid: false, reason: 'Ce lien a déjà été utilisé' };
-    }
-    if (invitation.status === 'expired' || new Date() > invitation.expires_at) {
-      if (invitation.status !== 'expired') {
-        await this.invitationRepo.update({ token }, { status: 'expired' });
-      }
-      return { valid: false, reason: 'Ce lien a expiré' };
-    }
+  async verifyToken(token: string): Promise < { valid: boolean; email?: string; reason?: string } > {
+  const invitation = await this.invitationRepo.findOne({ where: { token } });
 
-    return { valid: true, email: invitation.email };
+  if(!invitation) {
+    return { valid: false, reason: 'Token invalide' };
+  }
+    if(invitation.status === 'accepted') {
+  return { valid: false, reason: 'Ce lien a déjà été utilisé' };
+}
+if (invitation.status === 'expired' || new Date() > invitation.expires_at) {
+  if (invitation.status !== 'expired') {
+    await this.invitationRepo.update({ token }, { status: 'expired' });
+  }
+  return { valid: false, reason: 'Ce lien a expiré' };
+}
+
+return { valid: true, email: invitation.email };
   }
 
   async acceptInvitation(
-    token: string,
-    nom: string,
-    prenom: string,
-    password: string,
-  ): Promise<{ access_token: string; user: Partial<SoriaUser> }> {
-    const verification = await this.verifyToken(token);
-    if (!verification.valid) {
-      throw new BadRequestException(verification.reason);
-    }
+  token: string,
+  nom: string,
+  prenom: string,
+  password: string,
+): Promise < { access_token: string; user: Partial<SoriaUser> } > {
+  const verification = await this.verifyToken(token);
+  if(!verification.valid) {
+  throw new BadRequestException(verification.reason);
+}
 
-    const existing = await this.userRepo.findOne({ where: { email: verification.email } });
-    if (existing) {
-      throw new ConflictException('Un compte existe déjà avec cet email');
-    }
+const existing = await this.userRepo.findOne({ where: { email: verification.email } });
+if (existing) {
+  throw new ConflictException('Un compte existe déjà avec cet email');
+}
 
-    const password_hash = await bcrypt.hash(password, 10);
-    const user = this.userRepo.create({
-      email: verification.email!,
-      nom,
-      prenom,
-      password_hash,
-      role: 'invited_user',
-    });
-    await this.userRepo.save(user);
+const password_hash = await bcrypt.hash(password, 10);
+const user = this.userRepo.create({
+  email: verification.email!,
+  nom,
+  prenom,
+  password_hash,
+  role: 'invited_user',
+});
+await this.userRepo.save(user);
 
-    await this.invitationRepo.update({ token }, { status: 'accepted', nom, prenom });
+await this.invitationRepo.update({ token }, { status: 'accepted', nom, prenom });
 
-    const access_token = this.jwtService.sign({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      prenom: user.prenom,
-      nom: user.nom,
-    });
+const access_token = this.jwtService.sign({
+  sub: user.id,
+  email: user.email,
+  role: user.role,
+  prenom: user.prenom,
+  nom: user.nom,
+});
 
-    return {
-      access_token,
-      user: { id: user.id, email: user.email, nom: user.nom, prenom: user.prenom, role: user.role },
-    };
+return {
+  access_token,
+  user: { id: user.id, email: user.email, nom: user.nom, prenom: user.prenom, role: user.role },
+};
   }
 
-  async findAll(): Promise<Invitation[]> {
-    return this.invitationRepo.find({ order: { created_at: 'DESC' } });
-  }
+  async findAll(): Promise < Invitation[] > {
+  return this.invitationRepo.find({ order: { created_at: 'DESC' } });
+}
 }

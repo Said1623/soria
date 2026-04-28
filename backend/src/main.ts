@@ -8,7 +8,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://soria-two.vercel.app',
+      'https://pedagov2-frontend.onrender.com',
+    ],
+    credentials: true,
+  });
   app.useGlobalPipes(new ValidationPipe());
 
   const seedService = app.get(SeedService);

@@ -34,9 +34,9 @@ export class InvitationsService {
 
     const invitation = this.invitationRepo.create({ email, token, status: 'pending', expires_at });
     await this.invitationRepo.save(invitation);
-
+console.log('RESEND KEY:', process.env.RESEND_API_KEY ? 'OK' : 'MANQUANTE');
     await this.resend.emails.send({
-      from: 'SORIA <noreply@soria.app>',
+      from: 'SORIA <noreply@TONDOMAINE_VERIFIE>',
       to: email,
       subject: 'Invitation à rejoindre SORIA',
       html: `
@@ -47,7 +47,7 @@ export class InvitationsService {
             le système d'action guidée pour la classe.
           </p>
           <p style="color: #374151; margin-bottom: 24px;">Ce lien est valable <strong>48 heures</strong>.</p>
-          <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/inscription?token=${token}"
+          <a href="https://soria-two.vercel.app/inscription?token=${token}"
              style="display: inline-block; background: #4f46e5; color: white; padding: 12px 24px;
                     border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px;">
             Créer mon compte →

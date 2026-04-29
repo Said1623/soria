@@ -1,0 +1,208 @@
+/* ── Sidebar SORIA ──────────────────────────────────────── */
+.s-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #0f1729;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  border-right: 1px solid rgba(255,255,255,.06);
+  transform: translateX(-260px);
+  transition: transform 200ms ease;
+}
+@media (min-width: 768px) {
+  .s-sidebar { transform: translateX(0); }
+}
+.s-sidebar--open { transform: translateX(0) !important; }
+
+.s-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 99;
+}
+
+/* Logo */
+.s-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.s-logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(124,58,237,.4);
+}
+.s-logo-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.s-logo-tagline {
+  font-size: .68rem;
+  color: rgba(255,255,255,.35);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: 1px;
+}
+
+/* Nav */
+.s-nav {
+  flex: 1;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+.s-nav-section {
+  font-size: .68rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.25);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: 10px 10px 4px;
+  margin-top: 4px;
+}
+.s-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: rgba(255,255,255,.55);
+  font-size: .87rem;
+  font-weight: 500;
+  transition: all 150ms ease;
+  text-decoration: none;
+  position: relative;
+}
+.s-nav-link:hover {
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.9);
+  text-decoration: none;
+}
+.s-nav-link--active {
+  background: rgba(167,139,250,.15);
+  color: #fff;
+}
+.s-nav-link--active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 18px;
+  background: #a78bfa;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Footer */
+.s-footer {
+  padding: 14px 10px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.s-footer-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.s-footer-avatar {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.s-footer-name {
+  font-size: .82rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.s-footer-email {
+  font-size: .72rem;
+  color: rgba(255,255,255,.35);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.s-logout {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.35);
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 7px;
+  transition: all 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .9rem;
+  line-height: 1;
+}
+.s-logout:hover {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.8);
+}
+
+/* ── Main ───────────────────────────────────────────────── */
+.s-wrap {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  background: #fafaf9;
+}
+.s-wrap--auth {
+  margin-left: 0;
+}
+@media (min-width: 768px) {
+  .s-wrap--auth { margin-left: 260px; }
+}
+
+/* ── Burger (mobile only) ───────────────────────────────── */
+.s-burger {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 98;
+  width: 40px; height: 40px;
+  background: #0f1729;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+@media (min-width: 768px) {
+  .s-burger { display: none; }
+}

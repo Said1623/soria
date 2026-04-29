@@ -8,8 +8,7 @@ export default function Layout() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  const isSuperAdmin = user?.role === 'super_admin';
-  const initials = `${user?.prenom?.[0] || ''}${user?.nom?.[0] || ''}`.toUpperCase() || '?';
+const initials = `${user?.prenom?.[0] || ''}${user?.nom?.[0] || ''}`.toUpperCase() || '?';
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
     `s-nav-link${isActive ? ' s-nav-link--active' : ''}`;
@@ -58,14 +57,6 @@ export default function Layout() {
               <span>📚</span><span>Mes kits</span>
             </NavLink>
 
-            {isSuperAdmin && (
-              <>
-                <div className="s-nav-section">Administration</div>
-                <NavLink to="/admin/invitations" className={navClass} onClick={close}>
-                  <span>⚙️</span><span>Invitations</span>
-                </NavLink>
-              </>
-            )}
 
           </nav>
 

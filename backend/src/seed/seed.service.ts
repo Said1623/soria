@@ -10,6 +10,10 @@ import { CLARIFIE_C1 } from './data/clarifie-c1.data';
 import { CLARIFIE_C2 } from './data/clarifie-c2.data';
 import { CLARIFIE_C3 } from './data/clarifie-c3.data';
 import { CLARIFIE_C4 } from './data/clarifie-c4.data';
+import { CAPTE_C1 } from './data/capte-c1.data';
+import { CAPTE_C2 } from './data/capte-c2.data';
+import { CAPTE_C3 } from './data/capte-c3.data';
+import { CAPTE_C4 } from './data/capte-c4.data';
 
 @Injectable()
 export class SeedService {
@@ -22,7 +26,9 @@ export class SeedService {
   async run() {
     await this.seedDomaines();
     await this.seedKits();
-    await this.seedReferentiel();
+    await this.seedClarifieReferentiel();
+    await this.seedCapteReferentiel();
+    await this.activateCapteKit();
     console.log('✅ SORIA — Seed complet');
   }
 
@@ -52,11 +58,23 @@ export class SeedService {
     console.log('✅ 32 kits seedés');
   }
 
-  private async seedReferentiel() {
-    const count = await this.refRepo.count();
+  private async seedClarifieReferentiel() {
+    const count = await this.refRepo.count({ where: { kit_code: 'CONSIGNES-CLARIFIE' } });
     if (count > 0) return;
     const all = [...CLARIFIE_C1, ...CLARIFIE_C2, ...CLARIFIE_C3, ...CLARIFIE_C4];
     await this.refRepo.save(all);
     console.log(`✅ ${all.length} items référentiel seedés (Clarifie C1/C2/C3/C4)`);
+  }
+
+  private async seedCapteReferentiel() {
+    const count = await this.refRepo.count({ where: { kit_code: 'CONSIGNES-CAPTE' } });
+    if (count > 0) return;
+    const all = [...CAPTE_C1, ...CAPTE_C2, ...CAPTE_C3, ...CAPTE_C4];
+    await this.refRepo.save(all);
+    console.log(`✅ ${all.length} items référentiel seedés (Capte C1/C2/C3/C4)`);
+  }
+
+  private async activateCapteKit() {
+    await this.kitRepo.update({ code: 'CONSIGNES-CAPTE' }, { actif: true });
   }
 }

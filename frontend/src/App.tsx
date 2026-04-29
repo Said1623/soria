@@ -9,6 +9,7 @@ import Analyseur from './pages/Analyseur';
 import Generateur from './pages/Generateur';
 import Login from './pages/Login';
 import Inscription from './pages/Inscription';
+import SsoCallback from './pages/SsoCallback';
 import { useAuth } from './hooks/useAuth';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -55,6 +56,7 @@ function App() {
         {/* Pages publiques sans sidebar */}
         <Route path="/login" element={<Login />} />
         <Route path="/inscription" element={<Inscription />} />
+        <Route path="/auth/sso" element={<SsoCallback />} />
 
         {/* Pages avec sidebar (Layout) */}
         <Route element={<Layout />}>

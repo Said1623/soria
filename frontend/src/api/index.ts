@@ -34,6 +34,8 @@ export const kitsApi = {
 export const kitFichesApi = {
   getNiveau: (kitId: number, niveau: number) =>
     api.get(`/kit-fiches/${kitId}/niveau/${niveau}`).then(r => r.data),
+  getOutils: (kitId: number) =>
+    api.get(`/kit-outils/${kitId}`).then(r => r.data),
 };
 
 export const invitationsApi = {

@@ -35,6 +35,16 @@ const COLOR_MAP: Record<string, { accent: string; bg: string; pill: string }> = 
   amber:  { accent: 'text-amber-600',  bg: 'bg-amber-50 hover:border-amber-300',   pill: 'bg-amber-100 text-amber-600' },
 };
 
+const OUTIL_SECTIONS = [
+  { type: 'fiche_survie', label: '🆘 Fiche de survie',           cols: 'grid-cols-2' },
+  { type: 'guide',        label: '📘 Guide complet (5 parties)', cols: 'grid-cols-2 sm:grid-cols-3' },
+  { type: 'exemple',      label: '📚 Exemples Tronc Commun',     cols: 'grid-cols-2 sm:grid-cols-3' },
+];
+
+function cloudinaryThumb(url: string) {
+  return url.replace('/upload/', '/upload/w_400,c_scale/');
+}
+
 function parseMarkdown(md: string): string {
   const lines = md.split('\n');
   const parts: string[] = [];
@@ -76,6 +86,8 @@ export default function KitHome() {
   const navigate = useNavigate();
   const [kit, setKit] = useState<any>(null);
   const [fiche, setFiche] = useState<any>(null);
+  const [outils, setOutils] = useState<any[]>([]);
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
   useEffect(() => {
     if (!kitCode) return;
@@ -87,10 +99,39 @@ export default function KitHome() {
     kitFichesApi.getNiveau(kit.id, 1)
       .then((fiches: any[]) => setFiche(fiches?.[0] ?? null))
       .catch(() => setFiche(null));
+    kitFichesApi.getOutils(kit.id)
+      .then(setOutils)
+      .catch(() => setOutils([]));
   }, [kit?.id]);
+
+  const outilsByType = (type: string) => outils.filter(o => o.type === type);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            onClick={() => setLightbox(null)}
+            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center
+                       rounded-full bg-white/10 hover:bg-white/20 text-white text-lg
+                       transition-colors"
+            aria-label="Fermer"
+          >
+            ✕
+          </button>
+          <img
+            src={lightbox}
+            alt=""
+            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          />
+        </div>
+      )}
 
       <button
         onClick={() => navigate(-1)}
@@ -109,6 +150,7 @@ export default function KitHome() {
         )}
       </div>
 
+      {/* Fiche de survie N1 */}
       {fiche && (
         <div className="mb-10 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-6">
           <div className="flex items-center justify-between mb-3">
@@ -138,6 +180,54 @@ export default function KitHome() {
             >
               Guide complet →
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Ressources de la fiche */}
+      {outils.length > 0 && (
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-xs text-stone-400 font-medium">Ressources de la fiche</span>
+            <div className="flex-1 h-px bg-stone-100" />
+          </div>
+
+          <div className="space-y-8">
+            {OUTIL_SECTIONS.map(({ type, label, cols }) => {
+              const items = outilsByType(type);
+              if (items.length === 0) return null;
+              return (
+                <div key={type}>
+                  <p className="text-xs font-semibold text-stone-500 uppercase tracking-widest mb-3">
+                    {label}
+                  </p>
+                  <div className={`grid ${cols} gap-3`}>
+                    {items.map((outil: any) => (
+                      <button
+                        key={outil.id}
+                        onClick={() => setLightbox(outil.fichierUrl)}
+                        className="group text-left rounded-xl border border-stone-200 overflow-hidden
+                                   hover:border-stone-300 hover:shadow-md transition-all duration-150 bg-white"
+                      >
+                        <div className="aspect-[3/4] bg-stone-100 overflow-hidden">
+                          <img
+                            src={cloudinaryThumb(outil.fichierUrl)}
+                            alt={outil.titre}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="px-3 py-2.5">
+                          <p className="text-xs font-medium text-stone-700 leading-tight line-clamp-2">
+                            {outil.titre}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

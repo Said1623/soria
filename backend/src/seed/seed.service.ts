@@ -5,6 +5,7 @@ import { Domaine } from '../domaines/entities/domaine.entity';
 import { Kit } from '../kits/entities/kit.entity';
 import { ReferentielItem } from '../referentiel/entities/referentiel-item.entity';
 import { KitFiche } from '../kit-fiches/kit-fiche.entity';
+import { KitOutil } from '../kit-fiches/kit-outil.entity';
 import { DOMAINES_DATA } from './data/domaines.data';
 import { KITS_DATA } from './data/kits.data';
 import { CLARIFIE_C1 } from './data/clarifie-c1.data';
@@ -16,6 +17,7 @@ import { CAPTE_C2 } from './data/capte-c2.data';
 import { CAPTE_C3 } from './data/capte-c3.data';
 import { CAPTE_C4 } from './data/capte-c4.data';
 import { KIT_FICHES_SEED } from './data/kit-fiches.data';
+import { KIT_OUTILS_SEED } from './data/kit-outils.data';
 
 @Injectable()
 export class SeedService {
@@ -24,6 +26,7 @@ export class SeedService {
     @InjectRepository(Kit) private kitRepo: Repository<Kit>,
     @InjectRepository(ReferentielItem) private refRepo: Repository<ReferentielItem>,
     @InjectRepository(KitFiche) private kitFicheRepo: Repository<KitFiche>,
+    @InjectRepository(KitOutil) private kitOutilRepo: Repository<KitOutil>,
   ) {}
 
   async run() {
@@ -33,6 +36,7 @@ export class SeedService {
     await this.seedCapteReferentiel();
     await this.activateCapteKit();
     await this.seedKitFiches();
+    await this.seedKitOutils();
     console.log('✅ SORIA — Seed complet');
   }
 
@@ -96,5 +100,23 @@ export class SeedService {
 
     await this.kitFicheRepo.save(fiches);
     console.log(`✅ ${fiches.length} fiches de survie seedées`);
+  }
+
+  private async seedKitOutils() {
+    const kit = await this.kitRepo.findOneBy({ code: 'CONSIGNES-VALIDE' });
+    if (!kit) return;
+
+    const count = await this.kitOutilRepo.count({ where: { kitId: kit.id } });
+    if (count > 0) return;
+
+    const outils = KIT_OUTILS_SEED.map((o, i) => ({
+      ...o,
+      kitId: kit.id,
+      ordre: i + 1,
+      description: "Fiche 2 — L'élève ne sait pas par où commencer",
+    }));
+
+    await this.kitOutilRepo.save(outils);
+    console.log(`✅ ${outils.length} outils seedés (CONSIGNES-VALIDE)`);
   }
 }

@@ -31,6 +31,11 @@ export const kitsApi = {
   getByCode: (code: string) => api.get(`/kits/${code}`).then(r => r.data),
 };
 
+export const kitFichesApi = {
+  getNiveau: (kitId: number, niveau: number) =>
+    api.get(`/kit-fiches/${kitId}/niveau/${niveau}`).then(r => r.data),
+};
+
 export const invitationsApi = {
   create: (email: string) =>
     api.post('/invitations', { email }).then(r => r.data),

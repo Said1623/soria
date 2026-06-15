@@ -106,13 +106,11 @@ export class SeedService {
     const kit = await this.kitRepo.findOneBy({ code: 'CONSIGNES-VALIDE' });
     if (!kit) return;
 
-    const count = await this.kitOutilRepo.count({ where: { kitId: kit.id } });
-    if (count > 0) return;
+    await this.kitOutilRepo.delete({ kitId: kit.id });
 
-    const outils = KIT_OUTILS_SEED.map((o, i) => ({
+    const outils = KIT_OUTILS_SEED.map(o => ({
       ...o,
       kitId: kit.id,
-      ordre: i + 1,
       description: "Fiche 2 — L'élève ne sait pas par où commencer",
     }));
 

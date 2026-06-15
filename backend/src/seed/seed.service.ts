@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Domaine } from '../domaines/entities/domaine.entity';
 import { Kit } from '../kits/entities/kit.entity';
 import { ReferentielItem } from '../referentiel/entities/referentiel-item.entity';
+import { KitFiche } from '../kit-fiches/kit-fiche.entity';
 import { DOMAINES_DATA } from './data/domaines.data';
 import { KITS_DATA } from './data/kits.data';
 import { CLARIFIE_C1 } from './data/clarifie-c1.data';
@@ -14,6 +15,7 @@ import { CAPTE_C1 } from './data/capte-c1.data';
 import { CAPTE_C2 } from './data/capte-c2.data';
 import { CAPTE_C3 } from './data/capte-c3.data';
 import { CAPTE_C4 } from './data/capte-c4.data';
+import { KIT_FICHES_SEED } from './data/kit-fiches.data';
 
 @Injectable()
 export class SeedService {
@@ -21,6 +23,7 @@ export class SeedService {
     @InjectRepository(Domaine) private domaineRepo: Repository<Domaine>,
     @InjectRepository(Kit) private kitRepo: Repository<Kit>,
     @InjectRepository(ReferentielItem) private refRepo: Repository<ReferentielItem>,
+    @InjectRepository(KitFiche) private kitFicheRepo: Repository<KitFiche>,
   ) {}
 
   async run() {
@@ -29,6 +32,7 @@ export class SeedService {
     await this.seedClarifieReferentiel();
     await this.seedCapteReferentiel();
     await this.activateCapteKit();
+    await this.seedKitFiches();
     console.log('✅ SORIA — Seed complet');
   }
 
@@ -76,5 +80,21 @@ export class SeedService {
 
   private async activateCapteKit() {
     await this.kitRepo.update({ code: 'CONSIGNES-CAPTE' }, { actif: true });
+  }
+
+  private async seedKitFiches() {
+    const count = await this.kitFicheRepo.count();
+    if (count > 0) return;
+
+    const kitCodes = KIT_FICHES_SEED.map(f => f.kitCode);
+    const kits = await this.kitRepo.findBy(kitCodes.map(code => ({ code })));
+    const kitMap = Object.fromEntries(kits.map(k => [k.code, k.id]));
+
+    const fiches = KIT_FICHES_SEED
+      .filter(f => kitMap[f.kitCode])
+      .map(({ kitCode, ...rest }) => ({ ...rest, kitId: kitMap[kitCode] }));
+
+    await this.kitFicheRepo.save(fiches);
+    console.log(`✅ ${fiches.length} fiches de survie seedées`);
   }
 }

@@ -3,6 +3,9 @@ import { Expose, Exclude } from 'class-transformer';
 @Exclude()
 export class KitDto {
   @Expose()
+  id: number;
+
+  @Expose()
   code: string;
 
   @Expose()

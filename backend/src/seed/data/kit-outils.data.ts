@@ -15,7 +15,7 @@ export const KIT_OUTILS_SEED = [
   { ordre: 7,  type: 'exemple',      titre: 'Exemple P1 — Français',              fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-55_3_oxnzlh` },
   { ordre: 8,  type: 'exemple',      titre: 'Exemple P2 — Mathématiques',         fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-55_4_tjiqcj` },
   { ordre: 9,  type: 'exemple',      titre: 'Exemple P3 — ECA',                   fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-57_vxvwbr`   },
-  { ordre: 10, type: 'exemple',      titre: 'Exemple P4 — Éveil historique',      fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-56_2_izqih`  },
+  { ordre: 10, type: 'exemple',      titre: 'Exemple P4 — Éveil historique',      fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-56_2_izqiht` },
   { ordre: 11, type: 'exemple',      titre: 'Exemple P5 — Français',              fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-56_3_nwplst` },
   { ordre: 12, type: 'exemple',      titre: 'Exemple P5 — Numérique',             fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-56_7_kyf3mx` },
   { ordre: 13, type: 'exemple',      titre: 'Exemple P6 — Mathématiques',         fichierUrl: `${BASE}PHOTO-2026-06-11-06-54-56_4_hobsms` },

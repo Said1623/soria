@@ -36,14 +36,10 @@ const COLOR_MAP: Record<string, { accent: string; bg: string; pill: string }> = 
 };
 
 const OUTIL_SECTIONS = [
-  { type: 'fiche_survie', label: '🆘 Fiche de survie',           cols: 'grid-cols-2' },
-  { type: 'guide',        label: '📘 Guide complet (5 parties)', cols: 'grid-cols-2 sm:grid-cols-3' },
-  { type: 'exemple',      label: '📚 Exemples Tronc Commun',     cols: 'grid-cols-2 sm:grid-cols-3' },
+  { type: 'fiche_survie', label: '🆘 Fiche de survie',       badge: 'Fiche de survie',     badgeCls: 'bg-red-50 text-red-600'    },
+  { type: 'guide',        label: '📘 Guide complet',          badge: 'Guide',               badgeCls: 'bg-blue-50 text-blue-600'  },
+  { type: 'exemple',      label: '📚 Exemples Tronc Commun',  badge: 'Exemple Tronc Commun', badgeCls: 'bg-green-50 text-green-700' },
 ];
-
-function cloudinaryThumb(url: string) {
-  return url.replace('/upload/', '/upload/w_400,c_scale/');
-}
 
 function parseMarkdown(md: string): string {
   const lines = md.split('\n');
@@ -87,7 +83,6 @@ export default function KitHome() {
   const [kit, setKit] = useState<any>(null);
   const [fiche, setFiche] = useState<any>(null);
   const [outils, setOutils] = useState<any[]>([]);
-  const [lightbox, setLightbox] = useState<string | null>(null);
 
   useEffect(() => {
     if (!kitCode) return;
@@ -108,30 +103,6 @@ export default function KitHome() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-
-      {/* Lightbox */}
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
-          onClick={() => setLightbox(null)}
-        >
-          <button
-            onClick={() => setLightbox(null)}
-            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center
-                       rounded-full bg-white/10 hover:bg-white/20 text-white text-lg
-                       transition-colors"
-            aria-label="Fermer"
-          >
-            ✕
-          </button>
-          <img
-            src={lightbox}
-            alt=""
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
-            onClick={e => e.stopPropagation()}
-          />
-        </div>
-      )}
 
       <button
         onClick={() => navigate(-1)}
@@ -193,7 +164,7 @@ export default function KitHome() {
           </div>
 
           <div className="space-y-8">
-            {OUTIL_SECTIONS.map(({ type, label, cols }) => {
+            {OUTIL_SECTIONS.map(({ type, label, badge, badgeCls }) => {
               const items = outilsByType(type);
               if (items.length === 0) return null;
               return (
@@ -201,28 +172,32 @@ export default function KitHome() {
                   <p className="text-xs font-semibold text-stone-500 uppercase tracking-widest mb-3">
                     {label}
                   </p>
-                  <div className={`grid ${cols} gap-3`}>
+                  <div className="space-y-2">
                     {items.map((outil: any) => (
-                      <button
+                      <div
                         key={outil.id}
-                        onClick={() => setLightbox(outil.fichierUrl)}
-                        className="group text-left rounded-xl border border-stone-200 overflow-hidden
-                                   hover:border-stone-300 hover:shadow-md transition-all duration-150 bg-white"
+                        className="flex items-center justify-between gap-4 rounded-xl border border-stone-200
+                                   bg-white px-4 py-3 hover:border-stone-300 hover:shadow-sm transition-all duration-150"
                       >
-                        <div className="aspect-[3/4] bg-stone-100 overflow-hidden">
-                          <img
-                            src={cloudinaryThumb(outil.fichierUrl)}
-                            alt={outil.titre}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="px-3 py-2.5">
-                          <p className="text-xs font-medium text-stone-700 leading-tight line-clamp-2">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-stone-400 flex-shrink-0">📄</span>
+                          <span className="text-sm font-medium text-stone-700 truncate">
                             {outil.titre}
-                          </p>
+                          </span>
+                          <span className={`flex-shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${badgeCls}`}>
+                            {badge}
+                          </span>
                         </div>
-                      </button>
+                        <a
+                          href={`${outil.fichierUrl}?fl_attachment=true`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold
+                                     text-violet-600 hover:text-violet-800 transition-colors"
+                        >
+                          📥 Télécharger
+                        </a>
+                      </div>
                     ))}
                   </div>
                 </div>
